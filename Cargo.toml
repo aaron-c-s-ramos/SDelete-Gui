@@ -2,9 +2,14 @@
 name = "sdelete-gui"
 version = "2.0.0"
 edition = "2021"
+authors = ["Aaron Christopher Ramos <aaron.c.s.ramos@gmail.com>"]
 description = "Windows Explorer context-menu manager and sequential batch runner for Microsoft Sysinternals SDelete"
 license = "MIT"
 repository = "https://github.com/aaron-c-s-ramos/SDelete-Gui"
+readme = "README.md"
+keywords = ["sdelete", "sysinternals", "windows", "gui", "security"]
+categories = ["gui", "filesystem", "command-line-utilities", "os::windows-apis"]
+exclude = ["Screenshots/*", "packaging/*"]
 
 [[bin]]
 name = "sdelete-gui"

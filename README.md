@@ -16,11 +16,11 @@ When you click **Enable**, the application checks `%LOCALAPPDATA%\SDelete-Gui`, 
 
 | Configuration Window (Dark Theme) | Configuration Window (Light Theme) |
 | :---: | :---: |
-| ![SDelete Gui Dark Theme](Screenshots/screenshot_gui_dark.png) | ![SDelete Gui Light Theme](Screenshots/screenshot_gui_light.png) |
+| ![SDelete Gui Dark Theme](https://raw.githubusercontent.com/aaron-c-s-ramos/SDelete-Gui/master/Screenshots/screenshot_gui_dark.png) | ![SDelete Gui Light Theme](https://raw.githubusercontent.com/aaron-c-s-ramos/SDelete-Gui/master/Screenshots/screenshot_gui_light.png) |
 
 | Windows Explorer Cascading Context Menu | Multi-File Confirmation Prompt |
 | :---: | :---: |
-| ![Windows Explorer Context Menu](Screenshots/screenshot_context_menu_focused.png) | ![Confirm Secure Delete Dialog](Screenshots/screenshot_confirm_dialog.png) |
+| ![Windows Explorer Context Menu](https://raw.githubusercontent.com/aaron-c-s-ramos/SDelete-Gui/master/Screenshots/screenshot_context_menu_focused.png) | ![Confirm Secure Delete Dialog](https://raw.githubusercontent.com/aaron-c-s-ramos/SDelete-Gui/master/Screenshots/screenshot_confirm_dialog.png) |
 
 ## Features
 
