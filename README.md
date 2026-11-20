@@ -20,7 +20,7 @@ When you click **Enable**, the application checks `%LOCALAPPDATA%\SDelete-Gui`, 
 
 | Windows Explorer Cascading Context Menu | Multi-File Confirmation Prompt |
 | :---: | :---: |
-| ![Windows Explorer Context Menu](Screenshots/screenshot_context_menu.png) | ![Confirm Secure Delete Dialog](Screenshots/screenshot_confirm_dialog.png) |
+| ![Windows Explorer Context Menu](Screenshots/screenshot_context_menu_focused.png) | ![Confirm Secure Delete Dialog](Screenshots/screenshot_confirm_dialog.png) |
 
 ## Features
 
