@@ -1,6 +1,9 @@
+use std::collections::BTreeMap;
 use std::path::PathBuf;
 
-use eframe::egui::{self, Color32, CornerRadius, RichText, Stroke, Visuals};
+use eframe::egui::{
+    self, Color32, CornerRadius, FontId, RichText, Stroke, Style, TextStyle, Visuals,
+};
 
 use crate::config::{
     Language, PassCount, RegistryScope, SDeleteConfig, ThemeMode, MAX_PASSES, MIN_PASSES,
@@ -11,13 +14,18 @@ use crate::sdelete_bin::{
     ensure_sdelete_binary, find_existing_sdelete, is_process_elevated, remove_managed_binary,
 };
 
+/// Global typography multiplier applied across all egui text styles.
+pub const FONT_SCALE: f32 = 1.5_f32;
+
+const BASE_HEADER_FONT_SIZE: f32 = 17.0_f32;
+
 /// Launches the eframe/egui configuration window.
 pub fn run_gui() -> eframe::Result {
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_title("SDelete Gui")
-            .with_inner_size([460.0, 500.0])
-            .with_min_inner_size([420.0, 460.0]),
+            .with_inner_size([640.0, 680.0])
+            .with_min_inner_size([560.0, 620.0]),
         ..Default::default()
     };
 
@@ -26,7 +34,7 @@ pub fn run_gui() -> eframe::Result {
         options,
         Box::new(|cc| {
             let app = SDeleteGuiApp::new();
-            apply_theme(&cc.egui_ctx, app.config.theme);
+            apply_style(&cc.egui_ctx, app.config.theme);
             Ok(Box::new(app))
         }),
     )
@@ -144,9 +152,13 @@ impl eframe::App for SDeleteGuiApp {
         let strings = strings_for(self.config.language);
 
         egui::TopBottomPanel::top("header_bar").show(ctx, |ui| {
-            ui.add_space(4.0);
+            ui.add_space(6.0);
             ui.horizontal(|ui| {
-                ui.label(RichText::new(strings.app_title).strong().size(17.0));
+                ui.label(
+                    RichText::new(strings.app_title)
+                        .strong()
+                        .size(BASE_HEADER_FONT_SIZE * FONT_SCALE),
+                );
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                     let theme_label = match self.config.theme {
                         ThemeMode::Dark => strings.theme_light,
@@ -157,12 +169,12 @@ impl eframe::App for SDeleteGuiApp {
                             ThemeMode::Dark => ThemeMode::Light,
                             ThemeMode::Light => ThemeMode::Dark,
                         };
-                        apply_theme(ctx, self.config.theme);
+                        apply_style(ctx, self.config.theme);
                         let _ = self.config.save();
                     }
 
                     egui::ComboBox::from_id_salt("language_selector")
-                        .width(84.0)
+                        .width(130.0)
                         .selected_text(match self.config.language {
                             Language::English => "English",
                             Language::Spanish => "Espanol",
@@ -202,11 +214,11 @@ impl eframe::App for SDeleteGuiApp {
                         });
                 });
             });
-            ui.add_space(4.0);
+            ui.add_space(6.0);
         });
 
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.spacing_mut().item_spacing.y = 8.0;
+            ui.spacing_mut().item_spacing.y = 10.0;
 
             ui.horizontal(|ui| {
                 ui.label(strings.passes_label);
@@ -247,7 +259,7 @@ impl eframe::App for SDeleteGuiApp {
             ui.separator();
 
             ui.label(strings.scope_label);
-            ui.horizontal(|ui| {
+            ui.horizontal_wrapped(|ui| {
                 ui.radio_value(
                     &mut self.config.registry_scope,
                     RegistryScope::CurrentUser,
@@ -277,12 +289,12 @@ impl eframe::App for SDeleteGuiApp {
                 }
             }
 
-            ui.add_space(4.0);
+            ui.add_space(6.0);
 
             ui.columns(2, |cols| {
                 if cols[0]
                     .add_sized(
-                        [cols[0].available_width(), 32.0],
+                        [cols[0].available_width(), 44.0],
                         egui::Button::new(strings.enable_button),
                     )
                     .clicked()
@@ -291,7 +303,7 @@ impl eframe::App for SDeleteGuiApp {
                 }
                 if cols[1]
                     .add_sized(
-                        [cols[1].available_width(), 32.0],
+                        [cols[1].available_width(), 44.0],
                         egui::Button::new(strings.disable_button),
                     )
                     .clicked()
@@ -318,8 +330,29 @@ impl eframe::App for SDeleteGuiApp {
     }
 }
 
-/// Applies clean neutral dark or light desktop visuals without decorative rounding.
-fn apply_theme(ctx: &egui::Context, theme: ThemeMode) {
+/// Scales every default egui text style by FONT_SCALE.
+pub fn scaled_text_styles() -> BTreeMap<TextStyle, FontId> {
+    Style::default()
+        .text_styles
+        .into_iter()
+        .map(|(style, mut font_id)| {
+            font_id.size *= FONT_SCALE;
+            (style, font_id)
+        })
+        .collect()
+}
+
+/// Applies clean neutral dark or light visuals together with 1.5x scaled typography.
+fn apply_style(ctx: &egui::Context, theme: ThemeMode) {
+    let mut style = Style {
+        text_styles: scaled_text_styles(),
+        ..Default::default()
+    };
+
+    style.spacing.icon_width = 20.0_f32;
+    style.spacing.icon_width_inner = 10.0_f32;
+    style.spacing.button_padding = egui::vec2(10.0_f32, 6.0_f32);
+
     let mut visuals = match theme {
         ThemeMode::Dark => {
             let mut v = Visuals::dark();
@@ -349,5 +382,28 @@ fn apply_theme(ctx: &egui::Context, theme: ThemeMode) {
     visuals.widgets.active.corner_radius = radius;
     visuals.widgets.open.corner_radius = radius;
 
-    ctx.set_visuals(visuals);
+    style.visuals = visuals;
+    ctx.set_style(style);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn scaled_text_styles_multiplies_all_defaults_by_font_scale() {
+        let defaults = Style::default().text_styles;
+        let scaled = scaled_text_styles();
+        assert_eq!(defaults.len(), scaled.len());
+
+        for (key, base_font) in defaults {
+            let scaled_font = scaled.get(&key).expect("Scaled text style must exist.");
+            let expected = base_font.size * FONT_SCALE;
+            assert!(
+                (scaled_font.size - expected).abs() < 0.001_f32,
+                "Expected {expected} for {key:?}, got {}",
+                scaled_font.size
+            );
+        }
+    }
 }
