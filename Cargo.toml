@@ -1,6 +1,6 @@
 [package]
 name = "sdelete-gui"
-version = "3.0.0"
+version = "2.0.0"
 edition = "2021"
 description = "Windows Explorer context-menu manager and sequential batch runner for Microsoft Sysinternals SDelete"
 license = "MIT"
