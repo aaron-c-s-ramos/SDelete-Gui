@@ -1,41 +1,36 @@
-SDelete Gui [![Build Status](https://ci.appveyor.com/api/projects/status/github/Tulpep/SDelete-Gui)](https://ci.appveyor.com/project/tulpep/SDelete-Gui)
-===========
+# SDelete Gui (Rust)
 
-### Securely delete files with an easy-to-use right-click option.
-![RightClick](Screenshots/RightClick.png)
+Windows Explorer context-menu manager and sequential batch runner for [Microsoft Sysinternals SDelete](https://learn.microsoft.com/en-us/sysinternals/downloads/sdelete).
 
-### [Download now][1]
+## Features
 
-## Introduction
-**SDelete Gui** is simple application that allows you to add, configure, and remove a "Secure Delete" option in the Windows context menu (right-click) of a selected file or folder. Secure Delete will **securely** and **permanently** delete all selected files and folders.  
+- **Sysinternals NTFS parity:** Wraps Microsoft Sysinternals `sdelete64.exe` (downloads automatically via HTTPS if not present locally).
+- **Deletion confirmation dialog:** Displays selected targets, mode, pass count, and an irreversibility warning before deletion.
+- **Sequential multi-file execution:** Merges multi-selected Explorer items over a Windows named pipe and executes `sdelete64.exe` sequentially without opening parallel console windows.
+- **Pass-count cascading submenu:** Adds a grouped Explorer menu with the configured default pass count plus quick presets (`1`, `3`, `5`, `7`, and `35` passes).
+- **Warning context-menu icon:** Adds an optional warning icon (`imageres.dll,-84`) to context-menu entries.
+- **Separate drive free-space modes:** Exposes **Clean Free Space (`-c`)** and **Zero Free Space (`-z`)** as distinct drive context-menu commands.
+- **Timestamped audit log:** Appends ISO-8601 timestamped execution records to a configurable log file under a cross-process mutex.
+- **No-elevation Current User scope:** Registers under `HKCU\Software\Classes` by default, with optional `All Users` (`HKLM\Software\Classes`) support when run as Administrator.
+- **Dark and light themes:** Includes a built-in Dark/Light theme toggle and English, Spanish, and German UI localization.
 
-**Note: There is NO confirmation dialog prior to deletion.  Once Secure Delete is clicked, all selected files and folders will be deleted and completely unrecoverable!**
+## Build and Test
 
-This tool adds the right menu option but does not contain the logic for deletion. It uses [SDelete](http://technet.microsoft.com/en-us/sysinternals/bb897443.aspx) of [Microsoft Sysinternals](http://technet.microsoft.com/en-us/sysinternals/bb545021.aspx) written by [Mark Russinovich](http://blogs.technet.com/b/markrussinovich/) to perform the file and folder deletion using a United States Department of Defense compliant algorithm. Click on [this link][5] to see how the SDelete utility works. 
+Requires Rust (`stable-x86_64-pc-windows-msvc`) and Visual Studio Build Tools on Windows:
 
-The application will download SDelete from Microsoft's web site in order to work properly. If the download fails, it will check if you already have SDelete in your System32 or SysWow64 folder.  In the event that SDelete could not be downloaded and it cannot be found on the hard drive, the application will display an error message and will not function correctly. 
+```powershell
+cargo test
+cargo clippy --all-targets -- -D warnings
+cargo build --release
+```
 
-## How to use the application
-1) Download [SDelete-Gui.exe][1]
-2) Excute the downloaded file
-3) Click "Yes" on the UAC Prompt that shows up  
-![UAC Dialog][UAC]
-4) The configuration window opens up  
-![Main Utility interface image][Utility]
-5) Press the '+' or '-' buttons to increase or decrease the number of passes the deletion will use. The ENABLE button must be clicked to save the value  
-  ![Change the number of passes image][ChangedPasses]
-6) Press the ENABLE button to add the Secure Delete option to the context menu when you right-click on files and folders  
-  ![Enable button image][EnableClicked]
-7) Press the DISABLE button to remove the Secure Delete option from the same context menus  
-  ![Disable button image][DisableClicked]
+The standalone executable builds to `target\release\sdelete-gui.exe`.
 
-[1]: https://github.com/Tulpep/SDelete-Gui/releases/latest
-[2]: http://technet.microsoft.com/en-us/sysinternals/bb897443.aspx
-[3]: http://technet.microsoft.com/en-us/sysinternals/bb545021.aspx
-[4]: http://blogs.technet.com/b/markrussinovich/
-[5]: https://docs.microsoft.com/en-us/sysinternals/downloads/sdelete#how-sdelete-works
-[UAC]: Screenshots/UACPrompt.png "UAC Prompt"
-[Utility]: Screenshots/Gui.png "Main utility interface"
-[ChangedPasses]: Screenshots/ChangedPasses.png "Increase or decrease the number of passes the deletion takes"
-[EnableClicked]: Screenshots/EnableClicked.png "Enable button"
-[DisableClicked]: Screenshots/DisableClicked.png "Disable button"
+## Storage Caveats
+
+- Software overwrites cannot guarantee physical flash erasure on SSDs that use wear-leveling and TRIM.
+- Sysinternals SDelete clears unallocated free space (`-c` / `-z`), not live-file cluster slack space.
+
+## License
+
+MIT License. Refer to `LICENSE.txt`.

@@ -1,0 +1,33 @@
+[package]
+name = "sdelete-gui"
+version = "3.0.0"
+edition = "2021"
+description = "Windows Explorer context-menu manager and sequential batch runner for Microsoft Sysinternals SDelete"
+license = "MIT"
+repository = "https://github.com/aaron-c-s-ramos/SDelete-Gui"
+
+[[bin]]
+name = "sdelete-gui"
+path = "src/main.rs"
+
+[dependencies]
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+eframe = { version = "0.31", default-features = false, features = ["default_fonts", "glow"] }
+thiserror = "2"
+ureq = { version = "3", default-features = false, features = ["rustls"] }
+winreg = "0.55"
+windows-sys = { version = "0.59", features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+    "Win32_System_IO",
+    "Win32_System_Pipes",
+    "Win32_System_Threading",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+strip = true
