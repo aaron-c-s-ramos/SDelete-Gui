@@ -34,9 +34,42 @@ When you click **Enable**, the application checks `%LOCALAPPDATA%\SDelete-Gui`, 
 - **Current User and All Users scopes:** Registers under `HKCU\Software\Classes` without elevation by default, or under `HKLM\Software\Classes` when run as Administrator.
 - **Dark and light themes:** Provides a built-in Dark/Light theme toggle and English, Spanish, and German UI localization.
 
+## Installation
+
+### GitHub Releases (Standalone Executable)
+
+Download `sdelete-gui.exe` directly from the [latest GitHub Release](https://github.com/aaron-c-s-ramos/SDelete-Gui/releases/latest).
+
+### Cargo (Crates.io)
+
+```powershell
+cargo install sdelete-gui
+```
+
+### Scoop
+
+```powershell
+scoop bucket add aaron https://github.com/aaron-c-s-ramos/scoop-bucket
+scoop install aaron/sdelete-gui
+```
+
+### WinGet
+
+> **Note:** Initial community repository submission is under moderator review at [microsoft/winget-pkgs#485091](https://github.com/microsoft/winget-pkgs/pull/485091). Once merged, install with:
+
+```powershell
+winget install aaron-c-s-ramos.SDeleteGui
+```
+
+Or use the short moniker:
+
+```powershell
+winget install sdelete-gui
+```
+
 ## How to Use
 
-1. Download or build `sdelete-gui.exe` (refer to **Build and Test** below).
+1. Install or build `sdelete-gui.exe` (refer to **Installation** above or **Build and Test** below).
 2. Run `sdelete-gui.exe` to open the configuration window.
 3. Set the default number of overwrite passes (`1` to `100`).
 4. Select your preferred options: confirmation prompt, sequential multi-file deletion, pass-count submenu, warning icon, and timestamped audit log path.
