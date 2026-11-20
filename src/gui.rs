@@ -18,14 +18,25 @@ use crate::sdelete_bin::{
 pub const FONT_SCALE: f32 = 1.5_f32;
 
 const BASE_HEADER_FONT_SIZE: f32 = 17.0_f32;
+const APP_ICON_PNG: &[u8] = include_bytes!("../assets/icon.png");
+
+/// Decodes the embedded PNG application icon into RGBA pixel data for the window viewport.
+pub fn load_app_icon() -> Option<egui::IconData> {
+    eframe::icon_data::from_png_bytes(APP_ICON_PNG).ok()
+}
 
 /// Launches the eframe/egui configuration window.
 pub fn run_gui() -> eframe::Result {
+    let mut viewport = egui::ViewportBuilder::default()
+        .with_title("SDelete Gui")
+        .with_inner_size([640.0, 616.0])
+        .with_min_inner_size([560.0, 580.0]);
+    if let Some(icon) = load_app_icon() {
+        viewport = viewport.with_icon(std::sync::Arc::new(icon));
+    }
+
     let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default()
-            .with_title("SDelete Gui")
-            .with_inner_size([640.0, 616.0])
-            .with_min_inner_size([560.0, 580.0]),
+        viewport,
         ..Default::default()
     };
 
@@ -416,5 +427,13 @@ mod tests {
                 scaled_font.size
             );
         }
+    }
+
+    #[test]
+    fn app_icon_decodes_to_256x256_rgba() {
+        let icon = load_app_icon().expect("Embedded PNG icon must decode.");
+        assert_eq!(icon.width, 256);
+        assert_eq!(icon.height, 256);
+        assert_eq!(icon.rgba.len(), 256 * 256 * 4);
     }
 }

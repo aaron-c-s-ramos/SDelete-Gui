@@ -7,3 +7,7 @@
 
 # Exclude generated lockfile from GitHub Linguist language statistics.
 Cargo.lock linguist-generated=true
+
+# Treat icon assets as binary files.
+*.png binary
+*.ico binary
