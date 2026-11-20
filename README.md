@@ -12,6 +12,16 @@ This application manages the context menu, batch queue, confirmation dialog, and
 
 When you click **Enable**, the application checks `%LOCALAPPDATA%\SDelete-Gui`, `System32`, `SysWOW64`, and `PATH` for `sdelete64.exe` (or `sdelete.exe`). If no local copy exists, it downloads the official binary over HTTPS from `live.sysinternals.com`. If the download fails and no local binary exists, the application displays an error message.
 
+## Screenshots
+
+| Configuration Window (Dark Theme) | Configuration Window (Light Theme) |
+| :---: | :---: |
+| ![SDelete Gui Dark Theme](Screenshots/screenshot_gui_dark.png) | ![SDelete Gui Light Theme](Screenshots/screenshot_gui_light.png) |
+
+| Windows Explorer Cascading Context Menu | Multi-File Confirmation Prompt |
+| :---: | :---: |
+| ![Windows Explorer Context Menu](Screenshots/screenshot_context_menu.png) | ![Confirm Secure Delete Dialog](Screenshots/screenshot_confirm_dialog.png) |
+
 ## Features
 
 - **Sysinternals NTFS parity:** Wraps Microsoft Sysinternals `sdelete64.exe` and downloads it via HTTPS when absent locally.
