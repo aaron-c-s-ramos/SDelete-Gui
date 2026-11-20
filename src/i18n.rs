@@ -79,7 +79,7 @@ const ENGLISH: Strings = Strings {
     confirm_more_prefix: "...and ",
     confirm_more_suffix: " more item(s).",
     admin_required_note: "All Users scope requires Administrator privileges.",
-    ssd_caveat_note: "Note: SSD wear-leveling limits software overwrites; live-file slack space is not cleared by SDelete.",
+    ssd_caveat_note: "Note: SSD wear-leveling limits software overwrites. Live-file slack space is not cleared by SDelete.",
 };
 
 const SPANISH: Strings = Strings {

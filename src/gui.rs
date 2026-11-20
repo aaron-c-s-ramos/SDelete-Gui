@@ -24,8 +24,8 @@ pub fn run_gui() -> eframe::Result {
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_title("SDelete Gui")
-            .with_inner_size([640.0, 680.0])
-            .with_min_inner_size([560.0, 620.0]),
+            .with_inner_size([640.0, 616.0])
+            .with_min_inner_size([560.0, 580.0]),
         ..Default::default()
     };
 
@@ -153,67 +153,78 @@ impl eframe::App for SDeleteGuiApp {
 
         egui::TopBottomPanel::top("header_bar").show(ctx, |ui| {
             ui.add_space(6.0);
-            ui.horizontal(|ui| {
-                ui.label(
-                    RichText::new(strings.app_title)
-                        .strong()
-                        .size(BASE_HEADER_FONT_SIZE * FONT_SCALE),
-                );
-                ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                    let theme_label = match self.config.theme {
-                        ThemeMode::Dark => strings.theme_light,
-                        ThemeMode::Light => strings.theme_dark,
-                    };
-                    if ui.button(theme_label).clicked() {
-                        self.config.theme = match self.config.theme {
-                            ThemeMode::Dark => ThemeMode::Light,
-                            ThemeMode::Light => ThemeMode::Dark,
+            ui.allocate_ui_with_layout(
+                egui::vec2(ui.available_width(), 40.0_f32),
+                egui::Layout::left_to_right(egui::Align::Center),
+                |ui| {
+                    ui.spacing_mut().interact_size.y = 36.0_f32;
+                    ui.label(
+                        RichText::new(strings.app_title)
+                            .strong()
+                            .size(BASE_HEADER_FONT_SIZE * FONT_SCALE),
+                    );
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        let theme_label = match self.config.theme {
+                            ThemeMode::Dark => strings.theme_light,
+                            ThemeMode::Light => strings.theme_dark,
                         };
-                        apply_style(ctx, self.config.theme);
-                        let _ = self.config.save();
-                    }
+                        if ui
+                            .add(
+                                egui::Button::new(theme_label)
+                                    .min_size(egui::vec2(76.0_f32, 36.0_f32)),
+                            )
+                            .clicked()
+                        {
+                            self.config.theme = match self.config.theme {
+                                ThemeMode::Dark => ThemeMode::Light,
+                                ThemeMode::Light => ThemeMode::Dark,
+                            };
+                            apply_style(ctx, self.config.theme);
+                            let _ = self.config.save();
+                        }
 
-                    egui::ComboBox::from_id_salt("language_selector")
-                        .width(130.0)
-                        .selected_text(match self.config.language {
-                            Language::English => "English",
-                            Language::Spanish => "Espanol",
-                            Language::German => "Deutsch",
-                        })
-                        .show_ui(ui, |ui| {
-                            if ui
-                                .selectable_value(
-                                    &mut self.config.language,
-                                    Language::English,
-                                    "English",
-                                )
-                                .changed()
-                            {
-                                let _ = self.config.save();
-                            }
-                            if ui
-                                .selectable_value(
-                                    &mut self.config.language,
-                                    Language::Spanish,
-                                    "Espanol",
-                                )
-                                .changed()
-                            {
-                                let _ = self.config.save();
-                            }
-                            if ui
-                                .selectable_value(
-                                    &mut self.config.language,
-                                    Language::German,
-                                    "Deutsch",
-                                )
-                                .changed()
-                            {
-                                let _ = self.config.save();
-                            }
-                        });
-                });
-            });
+                        egui::ComboBox::from_id_salt("language_selector")
+                            .width(130.0)
+                            .selected_text(match self.config.language {
+                                Language::English => "English",
+                                Language::Spanish => "Espanol",
+                                Language::German => "Deutsch",
+                            })
+                            .show_ui(ui, |ui| {
+                                if ui
+                                    .selectable_value(
+                                        &mut self.config.language,
+                                        Language::English,
+                                        "English",
+                                    )
+                                    .changed()
+                                {
+                                    let _ = self.config.save();
+                                }
+                                if ui
+                                    .selectable_value(
+                                        &mut self.config.language,
+                                        Language::Spanish,
+                                        "Espanol",
+                                    )
+                                    .changed()
+                                {
+                                    let _ = self.config.save();
+                                }
+                                if ui
+                                    .selectable_value(
+                                        &mut self.config.language,
+                                        Language::German,
+                                        "Deutsch",
+                                    )
+                                    .changed()
+                                {
+                                    let _ = self.config.save();
+                                }
+                            });
+                    });
+                },
+            );
             ui.add_space(6.0);
         });
 
