@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.28.0.schema.json
 
-PackageIdentifier: AaronChristopherRamos.SDeleteGui
+PackageIdentifier: aaron-c-s-ramos.SDeleteGui
 PackageVersion: 2.0.0
 PackageLocale: en-US
 Publisher: Aaron Christopher Ramos
@@ -13,6 +13,7 @@ License: MIT
 LicenseUrl: https://github.com/aaron-c-s-ramos/SDelete-Gui/blob/master/LICENSE.txt
 ShortDescription: Windows Explorer context-menu manager and sequential batch runner for Microsoft Sysinternals SDelete.
 Description: SDelete Gui adds, configures, and removes Secure Delete and Erase Free Space context menus in Windows Explorer for files, folders, and drives. It wraps Microsoft Sysinternals sdelete64.exe with a confirmation prompt, sequential multi-file execution, pass-count presets, and ISO-8601 audit logging.
+Moniker: sdelete-gui
 Tags:
 - context-menu
 - file-shredder
